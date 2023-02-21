@@ -1,16 +1,30 @@
 import { Avatar } from './Avatar'
 import { Comment } from './Comment'
 import styles from './Post.module.css'
+import { useState } from 'react'
 
-export function Post() {
+export function Post({ author, content }) {
+  const [comments, setComments] = useState(['Post bacana'])
+  const [newCommentText, setNewCommentText] = useState('')
+
+  function handleCreateNewComment() {
+    event.preventDefault()
+    setComments([...comments, newCommentText])
+    setNewCommentText('')
+  }
+
+  function handleNewCommentChange() {
+    setNewCommentText(event.target.value)
+  }
+
   return (
     <article className={styles.post}>
       <header>
         <div className={styles.author}>
-          <Avatar url="https://github.com/ciceroff.png" />
+          <Avatar url={author.avatarUrl} />
           <div className={styles.authorInfo}>
-            <strong>Nome</strong>
-            <span>Cargo</span>
+            <strong>{author.name}</strong>
+            <span>{author.role}</span>
           </div>
         </div>
 
@@ -18,27 +32,36 @@ export function Post() {
       </header>
 
       <div className={styles.content}>
-        <p>Fala galera</p>
-        <p>
-          Acabei de subir mais um projeto no meu portfolio. É um projeto que fiz
-          no NLW return, evento da rocket seat
-        </p>
-        <p>
-          <a href="#">#novoprojeto #nlw #rocketseat</a>{' '}
-        </p>
+        {content.map((line) => {
+          if (line.type === 'paragraph') {
+            return <p key={line.content}>{line.content}</p>
+          } else if (line.type === 'link') {
+            return (
+              <p key={line.content}>
+                <a>{line.content}</a>
+              </p>
+            )
+          }
+        })}
       </div>
 
-      <form className={styles.commentForm}>
+      <form onSubmit={handleCreateNewComment} className={styles.commentForm}>
         <strong>Deixe seu feedback</strong>
-        <textarea placeholder="Deixe um comentário" />
+        <textarea
+          onChange={handleNewCommentChange}
+          name="comment"
+          placeholder="Deixe um comentário"
+          value={newCommentText}
+        />
         <footer>
           <button type="submit">Publicar</button>
         </footer>
       </form>
+
       <div className={styles.commentList}>
-        <Comment />
-        <Comment />
-        <Comment />
+        {comments.map((comment) => {
+          return <Comment key={comment} content={comment} />
+        })}
       </div>
     </article>
   )

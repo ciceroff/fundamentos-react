@@ -12,6 +12,34 @@ const posts = [
       name: 'Cicero Fernandes',
       role: 'Estudante',
     },
+    content: [
+      { type: 'paragraph', content: 'Fala galera' },
+      {
+        type: 'paragraph',
+        content:
+          'Acabei de subir mais um projeto no meu portfolio. É um projeto que fiz no NLW return, evento da rocket seat',
+      },
+      { type: 'link', content: '#novoprojeto #nlw #rocketseat' },
+    ],
+    publishedAt: new Date('2022-05-03 20:00:00'),
+  },
+  {
+    id: 2,
+    author: {
+      avatarUrl: 'https://github.com/chfleury.png',
+      name: 'Christian Fleury',
+      role: 'Estudante',
+    },
+    content: [
+      { type: 'paragraph', content: 'Fala galera' },
+      {
+        type: 'paragraph',
+        content:
+          'Acabei de subir mais um projeto no meu portfolio. É um projeto que fiz no NLW return, evento da rocket seat',
+      },
+      { type: 'link', content: '#novoprojeto #nlw #rocketseat' },
+    ],
+    publishedAt: new Date('2022-05-03 20:00:00'),
   },
 ]
 function App() {
@@ -22,8 +50,16 @@ function App() {
       <div className={styles.wrapper}>
         <Sidebar />
         <main>
-          <Post author="Cicero Fernandes" content="Olá mundo" />
-          <Post author="Gabriel Marques" content="Olá mundo" />
+          {posts.map((post) => {
+            return (
+              <Post
+                key={post.id}
+                author={post.author}
+                content={post.content}
+                publishedAt={post.publishedAt}
+              />
+            )
+          })}
         </main>
       </div>
     </div>
