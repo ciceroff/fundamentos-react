@@ -17,6 +17,12 @@ export function Post({ author, content }) {
     setNewCommentText(event.target.value)
   }
 
+  function deleteComment(comment) {
+    const newComments = comments.filter((value) => value !== comment)
+    setComments(newComments)
+  }
+  const isNewCommentEmpty = newCommentText.length === 0
+
   return (
     <article className={styles.post}>
       <header>
@@ -49,18 +55,28 @@ export function Post({ author, content }) {
         <strong>Deixe seu feedback</strong>
         <textarea
           onChange={handleNewCommentChange}
+          required
           name="comment"
           placeholder="Deixe um comentário"
           value={newCommentText}
+          onInvalid={handleNewCommentInvalid}
         />
         <footer>
-          <button type="submit">Publicar</button>
+          <button disabled={isNewCommentEmpty} type="submit">
+            Publicar
+          </button>
         </footer>
       </form>
 
       <div className={styles.commentList}>
         {comments.map((comment) => {
-          return <Comment key={comment} content={comment} />
+          return (
+            <Comment
+              key={comment}
+              content={comment}
+              onDeleteComment={deleteComment}
+            />
+          )
         })}
       </div>
     </article>
